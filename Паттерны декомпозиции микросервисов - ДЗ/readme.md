@@ -535,7 +535,7 @@ stop
 @enduml
 -->
 
-![](aactivity-3-signin-upload.svg)
+![](activity-3-signin-upload.svg)
 
 Микросервисы:
 - вход с помощью Google;
