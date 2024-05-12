@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otus-ms-deployment
+  labels:
+    app: otus-ms
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: otus-ms
+  template:
+    metadata:
+      labels:
+        app: otus-ms
+    spec:
+      containers:
+      - name: otus-ms
+        image: hoborg91/otus-ms:latest
+        ports:
+        - containerPort: 8000
