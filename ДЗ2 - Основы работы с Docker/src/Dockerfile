@@ -9,6 +9,7 @@ WORKDIR /source/aspnetapp
 RUN dotnet restore
 
 # copy everything else and build app
+COPY Attributes/. ./Attributes/
 COPY Controllers/. ./Controllers/
 COPY Models/. ./Models/
 COPY Properties/. ./Properties/
