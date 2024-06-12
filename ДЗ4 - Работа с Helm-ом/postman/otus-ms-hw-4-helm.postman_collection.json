@@ -1,0 +1,291 @@
+{
+	"info": {
+		"_postman_id": "c087d456-ec80-4dc2-9f74-3b6677ed7a8b",
+		"name": "otus-ms-hw-4-helm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34900798"
+	},
+	"item": [
+		{
+			"name": "health probe yields {\"status\":\"OK\"}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"  pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is within an acceptable range\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status field equals 'OK'\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.status).to.eq(\"OK\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "arch.homework/otusapp/aeugene/health"
+			},
+			"response": []
+		},
+		{
+			"name": "post user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is within an acceptable range\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has header 'Location'\", function () {\r",
+							"    pm.response.to.have.header(\"Location\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate the response schema for required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.property('id');\r",
+							"\r",
+							"    pm.environment.set(\"userId\", responseData.id);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// var jsonData = JSON.parse(pm.response.text);\r",
+							"// pm.setEnvironmentVariable(\"userId\", jsonData.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"johndoe\",\r\n    \"firstname\": \"John\",\r\n    \"lastname\": \"Doe\",\r\n    \"email\": \"johndoe@example.mail\",\r\n    \"phone\": \"+1234567890\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "arch.homework/otusapp/aeugene/api/v1/user"
+			},
+			"response": []
+		},
+		{
+			"name": "get posted user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate the response schema for required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.property('id');\r",
+							"    pm.expect(responseData).to.have.property('username');\r",
+							"    pm.expect(responseData).to.have.property('firstName');\r",
+							"    pm.expect(responseData).to.have.property('lastName');\r",
+							"    pm.expect(responseData).to.have.property('email');\r",
+							"    pm.expect(responseData).to.have.property('phone');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate the response data\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData.id).to.eql(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData.username).to.eql('johndoe');\r",
+							"    pm.expect(responseData.firstName).to.eql('John');\r",
+							"    pm.expect(responseData.lastName).to.eql('Doe');\r",
+							"    pm.expect(responseData.email).to.eql('johndoe@example.mail');\r",
+							"    pm.expect(responseData.phone).to.eql('+1234567890');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "arch.homework/otusapp/aeugene/api/v1/user/{{userId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"someotherusername\",\r\n    \"firstname\": \"Not-John\",\r\n    \"lastname\": \"And-Also-Not-Doe\",\r\n    \"email\": \"some@other.email\",\r\n    \"phone\": \"+10987654321\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "arch.homework/otusapp/aeugene/api/v1/user/{{userId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "get updated user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate the response schema for required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.property('id');\r",
+							"    pm.expect(responseData).to.have.property('username');\r",
+							"    pm.expect(responseData).to.have.property('firstName');\r",
+							"    pm.expect(responseData).to.have.property('lastName');\r",
+							"    pm.expect(responseData).to.have.property('email');\r",
+							"    pm.expect(responseData).to.have.property('phone');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Validate the response data\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData.id).to.eql(pm.environment.get(\"userId\"));\r",
+							"    pm.expect(responseData.username).to.eql('someotherusername');\r",
+							"    pm.expect(responseData.firstName).to.eql('Not-John');\r",
+							"    pm.expect(responseData.lastName).to.eql('And-Also-Not-Doe');\r",
+							"    pm.expect(responseData.email).to.eql('some@other.email');\r",
+							"    pm.expect(responseData.phone).to.eql('+10987654321');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "arch.homework/otusapp/aeugene/api/v1/user/{{userId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "arch.homework/otusapp/aeugene/api/v1/user/{{userId}}"
+			},
+			"response": []
+		}
+	]
+}

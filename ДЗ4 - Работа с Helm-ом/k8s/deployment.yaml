@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otus-ms
+  labels:
+    app: otus-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otus-ms
+  template:
+    metadata:
+      labels:
+        app: otus-ms
+    spec:
+      containers:
+      - name: otus-ms
+        image: hoborg91/otus-ms-sample:v24
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: otus-ms-secret
+              key: postgresqlPassword
+        - name: ASPNETCORE_DBHOST
+          value: "ht-db-service"
+        - name: ASPNETCORE_DBPORT
+          value: "5432"
+        - name: ASPNETCORE_DBUSERNAME
+          value: "postgres"
+        - name: ASPNETCORE_DBNAME
+          value: "otusms"
