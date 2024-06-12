@@ -1,9 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  # annotations:
-  #   nginx.ingress.kubernetes.io/use-regex: "true"
-  #   nginx.ingress.kubernetes.io/rewrite-target: /$2
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   name: otus-ms-ingress
   namespace: default
 spec:
@@ -15,8 +15,7 @@ spec:
           - pathType: ImplementationSpecific
             backend:
               service:
-                name: otus-ms
+                name: otus-ms-service
                 port:
                   number: 80
-            # path: /otusapp/(.+?)/(.*)
-            path: /
+            path: /otusapp/(.+?)/(.*)
