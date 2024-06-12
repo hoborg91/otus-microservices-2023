@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: otus-ms-monitor
+  labels:
+    app: otus-ms
+spec:
+  endpoints:
+    - port: metrics
+      scrapeTimeout: 30s
+      path: /metrics
+      honorLabels: true
+      scheme: http
+#  jobLabel: stack
+  # namespaceSelector:
+  #   matchNames:
+  #     - default
+  selector:
+    matchLabels:
+      app: otus-ms
