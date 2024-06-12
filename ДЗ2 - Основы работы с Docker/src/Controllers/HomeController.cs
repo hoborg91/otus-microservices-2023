@@ -39,6 +39,11 @@ public class HomeController : Controller
         return Json(new { Status = "OK" });
     }
 
+    [Route("/serverError/")]
+    public IActionResult ServerError() {
+        throw new Exception("Some server error.");
+    }
+
     [Route("/readCfg/")]
     public IActionResult ReadCfg() {
         return Json(new { MyKey = _configuration["ASPNETCORE_OTHERKEY"] });
