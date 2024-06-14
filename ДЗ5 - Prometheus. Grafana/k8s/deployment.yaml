@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: otus-ms
-        image: hoborg91/otus-ms-sample:v25
+        image: hoborg91/otus-ms-sample:v28
         ports:
         - containerPort: 8000
         env:

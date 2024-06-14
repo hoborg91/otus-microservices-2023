@@ -9,6 +9,8 @@ public class HomeController : Controller
 {
     private readonly IConfiguration _configuration;
     private readonly ILogger<HomeController> _logger;
+    private readonly Lazy<Random> _random = new Lazy<Random>(() =>
+        new Random(DateTime.Now.Millisecond));
 
     public HomeController(
         IConfiguration configuration,
@@ -37,6 +39,27 @@ public class HomeController : Controller
     [Route("/health/")]
     public IActionResult Health() {
         return Json(new { Status = "OK" });
+    }
+
+    [Route("/test/")]
+    public IActionResult Test(
+        int? toSleepMillisecondsMin,
+        int? toSleepMillisecondsMax,
+        bool? yieldError
+    ) {
+        var toSleepMilliseconds = _random.Value.Next(
+            toSleepMillisecondsMin ?? 0,
+            toSleepMillisecondsMax ?? 10 * 1000);
+        Thread.Sleep(toSleepMilliseconds);
+        
+        if (yieldError.HasValue && yieldError.Value) {
+            throw new Exception("Some server error.");
+        }
+
+        return Json(new {
+            Status = "OK",
+            ToSleepMilliseconds = toSleepMilliseconds,
+        });
     }
 
     [Route("/serverError/")]
