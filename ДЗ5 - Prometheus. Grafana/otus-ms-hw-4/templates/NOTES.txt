@@ -1,0 +1,4 @@
+This Helm chart runs a PostgreSQL database named "otusms" with table "public.user".
+The database is accessible via port {{ include "db-service-node-port" . }} from the outside of the cluster.
+Inside the cluster the database's host is "{{ include "db-service-name" . }}".
+The database can be considered configured after job "{{ include "db-migration-0-name" . }}" finishes.
